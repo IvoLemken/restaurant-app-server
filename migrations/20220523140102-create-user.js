@@ -30,6 +30,14 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      isAdmin: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
+      accountBlocked: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       }
     });
   },

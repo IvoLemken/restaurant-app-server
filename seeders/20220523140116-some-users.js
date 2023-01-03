@@ -13,6 +13,8 @@ module.exports = {
           password: bcrypt.hashSync("apple", 10),
           createdAt: new Date(),
           updatedAt: new Date(),
+          isAdmin: false,
+          accountBlocked: true,
         }, 
         {
           name: "Banana",
@@ -21,6 +23,8 @@ module.exports = {
           password: bcrypt.hashSync("banana", 10),
           createdAt: new Date(),
           updatedAt: new Date(),
+          isAdmin: true,
+          accountBlocked: false,
         },  
         {
           name: "Coco",
@@ -29,6 +33,8 @@ module.exports = {
           password: bcrypt.hashSync("coco", 10),
           createdAt: new Date(),
           updatedAt: new Date(),
+          isAdmin: false,
+          accountBlocked: false,
         },     
       ],
       {}
