@@ -27,6 +27,12 @@ router.post("/login", async (req, res, next) => {
       });
     }
 
+    if (user.accountBlocked) {
+      return res.status(403).send({
+        message: "This account has been blocked. Please contact an administator for more information",
+      });
+    }
+
     delete user.dataValues["password"]; // don't send back the password hash
     const token = toJWT({ userId: user.id });
     return res.status(200).send({ token, user: user.dataValues });
