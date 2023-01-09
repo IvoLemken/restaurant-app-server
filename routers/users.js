@@ -15,7 +15,8 @@ router.get("/all", authMiddleware, async (req, res) => {
     }
     
     const users = await User.findAll({ 
-        attributes : ["id","name",'email','accountBlocked']
+        attributes : ["id","name",'email','accountBlocked'],
+        order: [["name", "ASC"],["email", "ASC"]]
     });
 
     return res.status(200).send({"users": users})
@@ -36,7 +37,13 @@ router.post("/blockUnblock", authMiddleware, async (req, res) => {
           .status(400)
           .send({ message: "Please provide an id" });
     }
-    if (!isBool(accountBlocked)) {
+    if (accountBlocked === undefined) {
+        return res
+          .status(400)
+          .send({ message: "Please provide an accountBlocked value" });
+    }
+    if (typeof accountBlocked !== "boolean") {
+        console.log(accountBlocked)
         return res
           .status(400)
           .send({ message: "Please provide an accountBlocked value of type Boolean" });
@@ -46,9 +53,9 @@ router.post("/blockUnblock", authMiddleware, async (req, res) => {
         where: { id: id }
     },)
     
-    const blockDescription = "blocked"
+    let blockDescription = "blocked"
     if (!accountBlocked) {
-        "unblocked"
+        blockDescription = "unblocked"
     }
     return res.status(200).send({ message: `User was ${blockDescription}` })
 });
