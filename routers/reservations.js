@@ -31,14 +31,13 @@ router.post("/forDate", async (req, res) => {
 });
 
 //all
-router.get("/all", async (req, res) => {
-// router.get("/all", authMiddleware, async (req, res) => {
-    // if (!req.user.isAdmin) {
-    //     return res.status(403).send({
-    //         message:
-    //           "You do not have sufficient priviliges to access this content"
-    //       });
-    // }
+router.get("/all", authMiddleware, async (req, res) => {
+    if (!req.user.dataValues["isAdmin"]) {
+        return res.status(403).send({
+            message:
+              "You do not have sufficient priviliges to access this content"
+          });
+    }
     
     const reservations = await Reservation.findAll({ 
         attributes : ["id","date",'tableId'],
@@ -49,5 +48,24 @@ router.get("/all", async (req, res) => {
 
     return res.status(200).send({"reservedTables": reservations})
   });
+
+//create
+router.post("/create", authMiddleware, async (req, res) => {
+    const { date, tableId } = req.body;
+    
+    if (!date || !tableId) {
+        return res
+          .status(400)
+          .send({ message: req.body });
+    }
+
+    await Reservation.create({
+        date: date,
+        tableId: tableId,
+        userId: req.user.dataValues["id"]
+    },)
+    
+    return res.status(201).send({ message: "Reservation was created" })
+});
 
 module.exports = router;
