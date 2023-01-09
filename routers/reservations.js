@@ -56,7 +56,7 @@ router.post("/create", authMiddleware, async (req, res) => {
     if (!date || !tableId) {
         return res
           .status(400)
-          .send({ message: req.body });
+          .send({ message: "Please provide a date and a tableId" });
     }
 
     await Reservation.create({
@@ -66,6 +66,30 @@ router.post("/create", authMiddleware, async (req, res) => {
     },)
     
     return res.status(201).send({ message: "Reservation was created" })
+});
+
+//cancel
+router.post("/cancel", authMiddleware, async (req, res) => {
+    if (!req.user.dataValues["isAdmin"]) {
+        return res.status(403).send({
+            message:
+              "You do not have sufficient priviliges to perform this action"
+          });
+    }
+
+    const { id } = req.body;
+    
+    if (!id) {
+        return res
+          .status(400)
+          .send({ message: "Please provide an id" });
+    }
+
+    await Reservation.destroy({
+        where: { id: id }
+    },)
+    
+    return res.status(200).send({ message: "Reservation was deleted" })
 });
 
 module.exports = router;
