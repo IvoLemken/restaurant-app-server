@@ -1,6 +1,6 @@
 # Server for restaurant app
 
-This is a simple server template to for my students to start projects quickly.
+This is a simple server for a restaurant reservation app
 
 ## Endpoints
 
